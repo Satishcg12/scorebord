@@ -29,6 +29,7 @@ const useTimerStore = create(
         intervalId: 0,
         isEditing: false,
         setTime: (m: number, s: number) => {
+            if(m<0) set({m:0})
             if (s > 60) {
                 set({ m: m+1, s: s % 60 });
             } 

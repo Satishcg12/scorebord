@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        "digital-display": "Digital Display",
+        "digital-display": ["Digital Display"],
       },
     },
   },
