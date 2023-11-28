@@ -1,26 +1,26 @@
-
-
-
 import { WebviewWindow } from '@tauri-apps/api/window';
-import usePlayerStore from '../store/Player';
+import usePlayerStore from '../store/KumiteScoreStore';
 import Button from '../components/Button';
 import useTimerStore from '../store/Timer';
 import MaximizeIcon from "../assets/icons/maximize-solid.svg"
 import ResetIcon from "../assets/icons/arrow-rotate-right-solid.svg"
 import CloseIcon from "../assets/icons/xmark-solid.svg"
+import useSound from '../hooks/useSound';
 
 
 
-const ScoreboardController = () => {
-  const { name1, name2, setName1, setName2, addIppon1, addIppon2, addWazaari1, addWazaari2, addYuko1, addYuko2, subtract1, subtract2, penalty1, penalty2, score1, score2, setPenalty1, setPenalty2, s1, s2, changeS1, changeS2, reset, penaltyH1, penaltyH2, penaltyK1, penaltyK2, penaltyS1, penaltyS2, toggleH1, toggleH2, toggleK1, toggleK2, toggleS1, toggleS2 } = usePlayerStore((state) => state);
-  const { m, s, toggleEdit, isEditing, isRunning, setMinutes, setSeconds, start, stop } = useTimerStore((state) => state);
+const KUMITEScoreboardController = () => {
+  const playBuzzer = useSound("/assets/sounds/buzzer.mp3");
+  const { name1, name2, setName1, setName2, addIppon1, addIppon2, addWazaari1, addWazaari2, addYuko1, addYuko2, subtract1, subtract2, penalty1, penalty2, score1, score2, setPenalty1, setPenalty2, s1, s2, changeS1, changeS2, reset, penaltyK1, penaltyK2, penaltyS1, penaltyS2, toggleK1, toggleK2, toggleS1, toggleS2 } = usePlayerStore((state) => state);
+  const { m, s ,ms, toggleEdit, isEditing, isRunning, setMinutes, setSeconds, start, stop } = useTimerStore((state) => state);
 
-  const penaltys = ["C1", "C2", "C3", "HC"]
+  const penaltys = ["C1", "C2", "C3", "HC", "H"]
 
   const createWindow = () => {
     console.log("create window")
     const new_window = new WebviewWindow("scoreboard", {
-      url: '/scoreboard',
+      url: '/kumites-scoreboard',
+      title: "Scoreboard",
       fullscreen: true,
       resizable: true,
       center: true
@@ -38,160 +38,6 @@ const ScoreboardController = () => {
       appWindow.close();
     }
   }
-
-
-  // const changeName = (player: 1 | 2, name: string) => {
-  //   const appWindow = WebviewWindow.getByLabel("scoreboard");
-  //   if (appWindow === null) {
-  //     message("Scoreboard not found please reopen it", { type: "error" });
-  //     return;
-  //   }
-  //   if (player === 1) {
-  //     setName1(name);
-  //   } else {
-  //     setName2(name);
-  //   }
-  //   appWindow.emit('changeName', { player, name }).catch((e) => {
-  //     console.log(e);
-  //   });
-  // }
-
-  // const addIppon = (player: 1 | 2) => {
-  //   const appWindow = WebviewWindow.getByLabel("scoreboard");
-  //   if (appWindow === null) {
-  //     message("Scoreboard not found please reopen it", { type: "error" });
-  //     return;
-  //   }
-  //   if (player === 1) {
-  //     addIppon1();
-  //   } else {
-  //     addIppon2();
-  //   }
-  //   appWindow.emit('addIppon', player).catch((e) => {
-  //     console.log(e);
-  //   });
-  // }
-  // const addWazaari = (player: 1 | 2) => {
-  //   const appWindow = WebviewWindow.getByLabel("scoreboard");
-  //   if (appWindow === null) {
-  //     message("Scoreboard not found please reopen it", { type: "error" });
-  //     return;
-  //   }
-  //   if (player === 1) {
-  //     addWazaari1();
-  //   } else {
-  //     addWazaari2();
-  //   }
-  //   appWindow.emit('addWazaari', player).catch((e) => {
-  //     console.log(e);
-  //   });
-  // }
-  // const addYuko = (player: 1 | 2) => {
-  //   const appWindow = WebviewWindow.getByLabel("scoreboard");
-  //   if (appWindow === null) {
-  //     message("Scoreboard not found please reopen it", { type: "error" });
-  //     return;
-  //   }
-  //   if (player === 1) {
-  //     addYuko1();
-  //   } else {
-  //     addYuko2();
-  //   }
-  //   appWindow.emit('addYuko', player).catch((e) => {
-  //     console.log(e);
-  //   });
-  // }
-  // const subtract = (player: 1 | 2) => {
-  //   const appWindow = WebviewWindow.getByLabel("scoreboard");
-  //   if (appWindow === null) {
-  //     message("Scoreboard not found please reopen it", { type: "error" });
-  //     return;
-  //   }
-  //   if (player === 1) {
-  //     subtract1();
-  //   } else {
-  //     subtract2();
-  //   }
-  //   appWindow.emit('subtract', player).catch((e) => {
-  //     console.log(e);
-  //   });
-  // }
-
-  // const addPenalty = (player: 1 | 2, penalty: 0 | 1 | 2 | 3 | 4) => {
-  //   const appWindow = WebviewWindow.getByLabel("scoreboard");
-  //   if (appWindow === null) {
-  //     message("Scoreboard not found please reopen it", { type: "error" });
-  //     return;
-  //   }
-  //   if (player === 1) {
-  //     setPenalty1(penalty);
-  //   } else {
-  //     setPenalty2(penalty);
-  //   }
-  //   appWindow.emit('addPenalty', player).catch((e) => {
-  //     console.log(e);
-  //   });
-  // }
-  // const chnageS = (player: 1 | 2) => {
-  //   const appWindow = WebviewWindow.getByLabel("scoreboard");
-  //   if (appWindow === null) {
-  //     message("Scoreboard not found please reopen it", { type: "error" });
-  //     return;
-  //   }
-  //   if (player === 1) {
-  //     changeS1();
-  //   } else {
-  //     changeS2();
-  //   }
-  //   appWindow.emit('addPenalty', player).catch((e) => {
-  //     console.log(e);
-  //   });
-  // }
-
-  // const changeTime = (m: number, s: number) => {
-  //   const appWindow = WebviewWindow.getByLabel("scoreboard");
-  //   if (appWindow !== null) {
-  //     appWindow.emit('changeTime', { m, s }).catch((e) => {
-  //       console.log(e);
-  //     });
-  //   }
-  //   setTime(m, s);
-  // }
-
-  // const startTimer = () => {
-  //   const appWindow = WebviewWindow.getByLabel("scoreboard");
-  //   if (appWindow === null) {
-  //     message("Scoreboard not found please reopen it", { type: "error" });
-  //     return;
-  //   }
-  //   start();
-  //   appWindow.emit('startTimer').catch((e) => {
-  //     console.log(e);
-  //   });
-  // }
-  // const stopTimer = () => {
-  //   const appWindow = WebviewWindow.getByLabel("scoreboard");
-  //   if (appWindow === null) {
-  //     message("Scoreboard not found please reopen it", { type: "error" });
-  //     return;
-  //   }
-  //   stop();
-  //   appWindow.emit('stopTimer').catch((e) => {
-  //     console.log(e);
-  //   });
-  // }
-  // const resetTimer = () => {
-  //   const appWindow = WebviewWindow.getByLabel("scoreboard");
-  //   if (appWindow === null) {
-  //     message("Scoreboard not found please reopen it", { type: "error" });
-  //     return;
-  //   }
-  //   setTime(0, 0);
-  //   appWindow.emit('resetTimer').catch((e) => {
-  //     console.log(e);
-  //   });
-  // }
-
 
 
 
@@ -299,7 +145,7 @@ const ScoreboardController = () => {
               return (
                 <Button
                   key={index + 1}
-                  onClick={() => setPenalty1(index + 1 as 0 | 1 | 2 | 3 | 4)}
+                  onClick={() => setPenalty1(index + 1 as 0 | 1 | 2 | 3 | 4| 5)}
                   active={penalty1 >= index + 1}
 
                   color="black" >
@@ -308,13 +154,6 @@ const ScoreboardController = () => {
               )
             })
           }
-          <Button
-            color='black'
-            onClick={toggleH1}
-            active={penaltyH1}
-          >
-            H
-          </Button>
           <Button
             color='black'
             onClick={toggleS1}
@@ -359,7 +198,11 @@ const ScoreboardController = () => {
               <div className='text-9xl text-black font-digital-display col-span-3 row-span-2 grid grid-cols-3 place-items-center'>
                 <span>{m < 10 ? "0" + m : m}</span>
                 <span>:</span>
-                <span>{s < 10 ? "0" + s : s}</span>
+                <span>{s < 10 ? "0" + s : s}
+                  <span className='text-4xl'>
+                    {"."+ ms}
+                  </span>
+                </span>
               </div>
             )}
             <Button
@@ -427,13 +270,6 @@ const ScoreboardController = () => {
           })}
           <Button
             color='black'
-            onClick={toggleH2}
-            active={penaltyH2}
-          >
-            H
-          </Button>
-          <Button
-            color='black'
             onClick={toggleS2}
             active={penaltyS2}
           >
@@ -455,4 +291,4 @@ const ScoreboardController = () => {
   )
 }
 
-export default ScoreboardController
+export default KUMITEScoreboardController

@@ -9,7 +9,7 @@ function App() {
 
     <div className="grid  place-items-center h-screen">
       
-      <Link to="/scoreboard-controller">sb</Link>
+      <Link to="/kumites-scoreboard-controller">sb</Link>
         <button onClick={() => invoke("open_scoreboard")}>Play</button>
       
     </div>

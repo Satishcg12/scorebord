@@ -9,7 +9,7 @@ fn greet(name: &str) -> String {
 
 #[tauri::command]
 async fn open_scoreboard(app: tauri::AppHandle) {
-  let window = tauri::WindowBuilder::new(&app, "label", tauri::WindowUrl::App("/scoreboard".into()))
+  tauri::WindowBuilder::new(&app, "label", tauri::WindowUrl::App("/kumites-scoreboard".into()))
   .title("Scores")
     .build()
     .unwrap();
