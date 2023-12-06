@@ -22,6 +22,7 @@ type Timer = {
 
     setIsEditing: (isEditing: boolean) => void;
     setIsRunning: (isRunning: boolean) => void;
+    resetTimer: () => void;
 
 };
 
@@ -89,6 +90,9 @@ const useTimerStore = create(
         },
         setMilliseconds: (ms: number) => set({ ms }),
         setIsRunning: (isRunning: boolean) => set({ isRunning }),
+        resetTimer: () => {
+            if (!get().isRunning) set({ m: 0, s: 0, ms: 0 });
+        },
 
     }), {
     name: "timer",

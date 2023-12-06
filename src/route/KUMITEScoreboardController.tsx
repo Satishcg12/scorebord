@@ -5,22 +5,23 @@ import useTimerStore from '../store/Timer';
 import MaximizeIcon from "../assets/icons/maximize-solid.svg"
 import ResetIcon from "../assets/icons/arrow-rotate-right-solid.svg"
 import CloseIcon from "../assets/icons/xmark-solid.svg"
-import useSound from '../hooks/useSound';
+import LeftArrow from "../assets/icons/arrow-left-svgrepo-com.svg"
+import { useNavigate } from 'react-router-dom';
 
 
 
 const KUMITEScoreboardController = () => {
-  const playBuzzer = useSound("/assets/sounds/buzzer.mp3");
-  const { name1, name2, setName1, setName2, addIppon1, addIppon2, addWazaari1, addWazaari2, addYuko1, addYuko2, subtract1, subtract2, penalty1, penalty2, score1, score2, setPenalty1, setPenalty2, s1, s2, changeS1, changeS2, reset, penaltyK1, penaltyK2, penaltyS1, penaltyS2, toggleK1, toggleK2, toggleS1, toggleS2 } = usePlayerStore((state) => state);
-  const { m, s ,ms, toggleEdit, isEditing, isRunning, setMinutes, setSeconds, start, stop } = useTimerStore((state) => state);
+  const { name1, name2, setName1, setName2, addIppon1, addIppon2, addWazaari1, addWazaari2, addYuko1, addYuko2, subtract1, subtract2, penalty1, penalty2, score1, score2, setPenalty1, setPenalty2, s1, s2, changeS1, changeS2, reset, penaltyK1, penaltyK2, penaltyS1, penaltyS2, toggleK1, toggleK2, toggleS1, toggleS2, setWinner, winner } = usePlayerStore((state) => state);
+  const { m, s, ms, toggleEdit, isEditing, isRunning, setMinutes, setSeconds, start, stop ,resetTimer} = useTimerStore((state) => state);
+
+  const navigation = useNavigate();
 
   const penaltys = ["C1", "C2", "C3", "HC", "H"]
 
   const createWindow = () => {
-    console.log("create window")
-    const new_window = new WebviewWindow("scoreboard", {
+    const new_window = new WebviewWindow("KumiteScoreboard", {
       url: '/kumites-scoreboard',
-      title: "Scoreboard",
+      title: "Kumites Scoreboard",
       fullscreen: true,
       resizable: true,
       center: true
@@ -30,7 +31,7 @@ const KUMITEScoreboardController = () => {
     });
   }
   const closeWindow = () => {
-    const appWindow = WebviewWindow.getByLabel("scoreboard");
+    const appWindow = WebviewWindow.getByLabel("KumiteScoreboard");
     if (appWindow === null) {
       window.alert("Scoreboard not found please reopen it");
     }
@@ -47,6 +48,22 @@ const KUMITEScoreboardController = () => {
 
   return (
     <div className='h-screen  bg-black text-white grid grid-rows-3 grid-cols-1 text-3xl'>
+      {winner !== 0 && <div className='absolute top-0 left-0 w-screen h-screen bg-black bg-opacity-50 flex flex-col justify-center items-center z-30'>
+        <span className='text-9xl font-digital-display text-white visited:'>{winner === 1 ? "AKA" : "AO"} is the winner</span>
+        <div className='flex gap-2'>
+
+          <button
+            className='px-5 py-2 rounded-lg text-3xl font-bold bg-white text-black'
+            onClick={reset}>
+            NewGame
+          </button>
+          <button
+            className='px-5 py-2 rounded-lg text-3xl font-bold bg-white text-black'
+            onClick={() => { setWinner(0) }}>
+            Review
+          </button>
+        </div>
+      </div>}
       <div className='grid  grid-cols-2 p-2 gap-2 row-span-2'>
         <div className='bg-red-600 grid grid-cols-3 grid-rows-4 rounded-lg p-2 gap-2'>
           <div className='row-span-4 grid grid-rows-4 grid-cols-1   justify-center gap-3  '>
@@ -77,7 +94,18 @@ const KUMITEScoreboardController = () => {
 
           </div>
           <div className='col-span-2 row-span-1 grid grid-rows-2 grid-cols-1 itemc'>
-            <label htmlFor="name1" className=''>AKA</label>
+            <div className='grid grid-flow-col items-center'>
+
+              <label htmlFor="name1" className=''>AKA</label>
+              <Button
+                color='green'
+                onClick={() => {
+                  setWinner(1);
+                }}
+              >
+                AKA wins
+              </Button>
+            </div>
             <input type="text" className='text-black w-full p-1 rounded' name="name1" id="name1"
               value={name1}
               onChange={(e) => { setName1(e.target.value) }}
@@ -120,7 +148,17 @@ const KUMITEScoreboardController = () => {
             </Button>
           </div>
           <div className='col-span-2 row-span-1 grid grid-rows-2 grid-cols-1 itemc'>
-            <label htmlFor="name1">AO</label>
+            <div className='grid grid-flow-col items-center'>
+              <label htmlFor="name1" className=''>AO</label>
+              <Button
+                color='green'
+                onClick={() => {
+                  setWinner(2);
+                }}
+              >
+                AO wins
+              </Button>
+            </div>
             <input type="text" className='text-black w-full p-1 rounded' name="name1" id="name1"
               value={name2}
               onChange={(e) => { setName2(e.target.value) }}
@@ -145,7 +183,7 @@ const KUMITEScoreboardController = () => {
               return (
                 <Button
                   key={index + 1}
-                  onClick={() => setPenalty1(index + 1 as 0 | 1 | 2 | 3 | 4| 5)}
+                  onClick={() => setPenalty1(index + 1 as 0 | 1 | 2 | 3 | 4 | 5)}
                   active={penalty1 >= index + 1}
 
                   color="black" >
@@ -200,7 +238,7 @@ const KUMITEScoreboardController = () => {
                 <span>:</span>
                 <span>{s < 10 ? "0" + s : s}
                   <span className='text-4xl'>
-                    {"."+ ms}
+                    {"." + ms}
                   </span>
                 </span>
               </div>
@@ -222,7 +260,7 @@ const KUMITEScoreboardController = () => {
             </Button>
             <Button
               onClick={() => {
-                reset();
+                resetTimer();
               }}
               color='black'
             >
@@ -239,6 +277,12 @@ const KUMITEScoreboardController = () => {
             </Button>
           </div>
           <div className='grid grid-cols-4 place-items-center '>
+            <button 
+            onClick={() => {
+              navigation('/')
+            }}>
+              <img src={LeftArrow} alt="reset" className='h-14' title='back' />
+            </button>
             <button onClick={createWindow} >
               <img src={MaximizeIcon} alt="maximize" className='h-14' title='maximize' />
             </button>
@@ -248,6 +292,7 @@ const KUMITEScoreboardController = () => {
             <button onClick={reset} >
               <img src={ResetIcon} alt="reset" className='h-14' title='reset' />
             </button>
+
 
 
           </div>
@@ -284,7 +329,7 @@ const KUMITEScoreboardController = () => {
             >
               K
             </Button>
-            </div>
+          </div>
         </div>
       </div>
     </div>

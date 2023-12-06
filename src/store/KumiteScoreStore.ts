@@ -42,8 +42,7 @@ type Player = {
     toggleK2: () => void;
 
     winner: 0 | 1 | 2 ;
-    setWinner: (winner: 1 | 2) => void;
-
+    setWinner: (winner: 0|1 | 2) => void;
 
     reset: () => void;
 
@@ -97,19 +96,31 @@ const usePlayerStore = create(
         penaltyK1: false,
         penaltyS2: false,
         penaltyK2: false,
-        toggleS1: () => set({ penaltyS1: !get().penaltyS1 }),
-        toggleK1: () => set({ penaltyK1: !get().penaltyK1 }),
-        toggleS2: () => set({ penaltyS2: !get().penaltyS2 }),
-        toggleK2: () => set({ penaltyK2: !get().penaltyK2 }),
+        toggleS1: () =>{
+            if(!get().penaltyS1)Buzzer.play();
+            set({ penaltyS1: !get().penaltyS1 })
+        },
+        toggleK1: () => {
+            if(!get().penaltyK1)Buzzer.play();
+            set({ penaltyK1: !get().penaltyK1 })
+        },
+        toggleS2: () => {
+            if(!get().penaltyS2)Buzzer.play();
+            set({ penaltyS2: !get().penaltyS2 })
+        },
+        toggleK2: () => {
+            if(!get().penaltyK2)Buzzer.play();
+            set({ penaltyK2: !get().penaltyK2 })
+        },
         
         winner: 0,
-        setWinner: (winner: 1 | 2) => {
-            Buzzer.play();
-            set({ winner })
+        setWinner: (winner: 0 | 1 | 2) => {
+            if(winner!==0)Buzzer.play();
+            set({ winner });
         },
 
 
-        reset: () => set({ score1: 0, score2: 0, penalty1: 0, penalty2: 0, s1: false, s2: false , penaltyS1: false, penaltyK1: false, penaltyS2: false, penaltyK2: false, winner: 0 }),
+        reset: () => set({name1:"",name2:"", score1: 0, score2: 0, penalty1: 0, penalty2: 0, s1: false, s2: false , penaltyS1: false, penaltyK1: false, penaltyS2: false, penaltyK2: false, winner: 0 }),
 
     })
         , {
