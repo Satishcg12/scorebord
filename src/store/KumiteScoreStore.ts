@@ -44,6 +44,9 @@ type Player = {
     winner: 0 | 1 | 2 ;
     setWinner: (winner: 0|1 | 2) => void;
 
+    category: string;
+    setCategory: (category: string) => void;
+
     reset: () => void;
 
 
@@ -76,14 +79,13 @@ const usePlayerStore = create(
         subtract2: () => set({ score2: get().score2 > 0 ? get().score2 - 1 : 0 }),
         penalty1: 0,
         penalty2: 0,
-        setPenalty1: (penalty1: number) => {
+        setPenalty1: (penalty1: number) => {            
             
-            Buzzer.play();
-            set({ penalty1 })
+            set({ penalty1 : get().penalty1===penalty1?penalty1-1:penalty1})
         },
         setPenalty2: (penalty2: number) => {
-            Buzzer.play();
-            set({ penalty2 })
+            
+            set({ penalty2 : get().penalty2===penalty2?penalty2-1:penalty2})
         },
 
         s1: false,
@@ -119,8 +121,10 @@ const usePlayerStore = create(
             set({ winner });
         },
 
+        category: "",
+        setCategory: (category: string) => set({ category }),
 
-        reset: () => set({name1:"",name2:"", score1: 0, score2: 0, penalty1: 0, penalty2: 0, s1: false, s2: false , penaltyS1: false, penaltyK1: false, penaltyS2: false, penaltyK2: false, winner: 0 }),
+        reset: () => set({name1:"",name2:"", score1: 0, score2: 0, penalty1: 0, penalty2: 0, s1: false, s2: false , penaltyS1: false, penaltyK1: false, penaltyS2: false, penaltyK2: false, winner: 0, category: "" }),
 
     })
         , {

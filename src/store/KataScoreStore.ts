@@ -4,6 +4,7 @@ import BuzzerSound from "../assets/sounds/Buzzer.mp3"
 
 
 type KataScore = {
+    aka:boolean;
     name: string;
     division: string;
     kata: string;
@@ -25,6 +26,7 @@ type KataScore = {
     setGender:(gender: "male"|"female"|"other")=>void;
 
     toggleShowScores: () => void;
+    toggleAka:()=>void;
 
     reset: () => void;
 
@@ -33,6 +35,7 @@ const Buzzer = new Audio(BuzzerSound);
 
 const useKataScoreStore = create(
     persistNSync<KataScore>((set, get) => ({
+        aka:false,
         name: "",
         division: "",
         kata: "1-Anan",
@@ -50,7 +53,7 @@ const useKataScoreStore = create(
         setKata: (kata: string) => set({ kata }),
         setTatami: (tatami: string) => set({ tatami }),
         setNumberOfJudges: (numberOfJudges: 3 | 5 | 7) => {
-            set({ numberOfJudges })
+            set({ numberOfJudges, smallestScoreIndex: 0, largestScoreIndex: 0 })
             if (numberOfJudges < get().scores.length) {
                 set({ scores: get().scores.slice(0, numberOfJudges) })
             } else {
@@ -60,9 +63,17 @@ const useKataScoreStore = create(
                 }
                 set({ scores })
             }
+            for (let i = 0; i < get().scores.length; i++) {
+                if (get().scores[i] < get().scores[get().smallestScoreIndex]) {
+                    set({ smallestScoreIndex: i })
+                }
+                if (get().scores[i] > get().scores[get().largestScoreIndex]) {
+                    set({ largestScoreIndex: i })
+                }
+            }
     },
         toggleShowScores: () => {
-            Buzzer.play()
+            if (!get().showScores) Buzzer.play();
             set({ showScores: !get().showScores })
         },
         setScores: (index:number,score: number) => {
@@ -75,9 +86,10 @@ const useKataScoreStore = create(
                     set({ largestScoreIndex: i })
                 }
             }
-        }
-        ,
+        },
+        toggleAka:()=>set({aka:!get().aka}),
         reset: () => set({
+            aka:false,
             name: "",
             division: "",
             kata: "1-Anan",
