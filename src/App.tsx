@@ -1,7 +1,6 @@
 
 import "./App.css";
 import { Link } from "react-router-dom";
-import BackgroundVideo from "./assets/background.mp4"
 import { getName } from "@tauri-apps/api/app";
 import { useEffect, useState } from "react";
 
@@ -16,13 +15,13 @@ function App() {
 
   useEffect(() => {
     name();
+    
   }, []);
 
   return (
 
     <>
-      <video src={BackgroundVideo} className="absolute h-full w-full top-0 left-0 object-cover -z-10" autoPlay loop></video>
-      <div className="h-screen w-screen bg-[#00000050] text-white grid place-items-center">
+      <div className="h-screen w-screen bg-gradient-to-tr from-red-600 to-blue-600 text-white grid place-items-center">
         <div className="capitalize text-center">
           <span className="text-[10vh] font-quikhand font-bold tracking-widest">
             {Name}
@@ -40,8 +39,8 @@ function App() {
           </div>
         </div>
         <span  className="absolute bottom-0 right-0 text-xl underline font-quikhand font-thin tracking-widest ">
-          <a  href="https://github.com/Satishcg12" target="_blank" >
-            By - $@+!$#
+          <a  href="https://github.com/Satishcg12" target="_blank" className="text-2xl">
+            By - Satish Chaudhary
           </a>
         </span>
       </div> 

@@ -1,7 +1,7 @@
 import { persistNSync } from "persist-and-sync";
 import { create } from "zustand";
-import TingTingSound from "../assets/sounds/TingTing.mp3"
 import BuzzerSound from "../assets/sounds/Buzzer.mp3"
+import BeepSound from "../assets/sounds/Beep.mp3"
 
 
 type Timer = {
@@ -29,6 +29,7 @@ type Timer = {
 };
 
 const Buzzer = new Audio(BuzzerSound);
+const Beep = new Audio(BeepSound);
 const useTimerStore = create(
     persistNSync<Timer>((set, get) => ({
         m: 0,
@@ -48,7 +49,7 @@ const useTimerStore = create(
             if (!get().isRunning && !get().isEditing) {
                 const intervalId = setInterval(() => {
                     const { m, s, ms } = get();
-                    if(m===0&&s===15&&ms===0) Buzzer.play();
+                    if(m===0&&s===15&&ms===0) Beep.play();
                     if (ms > 0) {
                         set({ ms: ms - 1 });
                     } else if (s > 0) {

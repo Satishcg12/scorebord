@@ -47,6 +47,17 @@ type Player = {
     category: string;
     setCategory: (category: string) => void;
 
+    timer: number;
+    intervalId: number;
+    isTimerRunning: boolean;
+
+    setTimer: (timer: number) => void;
+    startTimer: () => void;
+    stopTimer: () => void;
+
+    hantei: boolean;
+    toggleHantei: () => void;
+
     reset: () => void;
 
 
@@ -124,11 +135,78 @@ const usePlayerStore = create(
         category: "",
         setCategory: (category: string) => set({ category }),
 
-        reset: () => set({name1:"",name2:"", score1: 0, score2: 0, penalty1: 0, penalty2: 0, s1: false, s2: false , penaltyS1: false, penaltyK1: false, penaltyS2: false, penaltyK2: false, winner: 0, category: "" }),
+        timer: 0,
+        intervalId: 0,
+        isTimerRunning: false,
+
+        setTimer: (timer: number) => {
+            set({ timer });
+        },
+        startTimer: () => {
+            if (!get().isTimerRunning) {
+
+                const intervalId = setInterval(() => {
+                    const { timer } = get();
+                    if (timer > 0) {
+                        set({ timer: timer - 1 });
+                    } else {
+                        clearInterval(get().intervalId);
+                        set({ isTimerRunning: false });
+                    }
+                }, 1000);
+                set({ intervalId , isTimerRunning: true });
+            }
+        },
+        stopTimer: () => {
+            if (get().isTimerRunning) {
+                clearInterval(get().intervalId);
+                set({ isTimerRunning: false });
+            }
+        },
+
+        hantei: false,
+        toggleHantei: () => set({ hantei: !get().hantei }),
+        reset: () => set({
+            score1: 0,
+            score2: 0,
+            penalty1: 0,
+            penalty2: 0,
+            s1: false,
+            s2: false,
+            penaltyS1: false,
+            penaltyK1: false,
+            penaltyS2: false,
+            penaltyK2: false,
+            winner: 0,
+            category: "",
+            timer: 0,
+            intervalId: 0,
+            isTimerRunning: false,
+            hantei: false,
+        
+        }),
 
     })
         , {
-            name: "player-storage"
+            name: "player-storage",
+            include:[
+                "name1",
+                "name2",
+                "score1",
+                "score2",
+                "penalty1",
+                "penalty2",
+                "penaltyS1",
+                "penaltyK1",
+                "penaltyS2",
+                "penaltyK2",
+                "winner",
+                "category",
+                "timer",
+                "s1",
+                "s2",
+                "hantei"
+            ]
         }
     )
 );

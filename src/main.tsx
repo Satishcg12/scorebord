@@ -12,6 +12,7 @@ import KUMITEScoreboard from "./route/KUMITEScoreboard";
 import App from "./App";
 import KATAScoreBoard from "./route/KATAScoreBoard";
 import KATAScoreBoardController from "./route/KATAScoreBoardController";
+import Vr from "./route/Vr";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,13 @@ const router = createBrowserRouter([
   {
     path:"/kata-scoreboard-controller",
     element: <KATAScoreBoardController/>  
+  },{
+    path: "/vr/:id",
+    element: <Vr />,
+  },
+  {
+    path: "*",
+    element: <div>Not Found</div>,
   }
 ]);
 

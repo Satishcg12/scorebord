@@ -4,10 +4,39 @@ import LeftArrow from "../assets/icons/arrow-left-svgrepo-com.svg"
 import MaximizeIcon from "../assets/icons/maximize-solid.svg"
 import CloseIcon from "../assets/icons/xmark-solid.svg"
 import { useNavigate } from "react-router-dom"
+import Button from "../components/Button"
 
 const KATAScoreBoardController = () => {
   const navigate = useNavigate()
-  const { division, setDivision, kata, setKata, name, setName, numberOfJudges, setNumberOfJudges, scores, setScores, tatami, setTatami, largestScoreIndex, reset, showScores, smallestScoreIndex, toggleShowScores, aka, toggleAka } = useKataScoreStore((state) => state)
+  const {
+    name,
+    setName,
+    aka,
+    toggleAka,
+    division,
+    setDivision,
+    kata,
+    setKata,
+    numberOfJudges,
+    setNumberOfJudges,
+    tatami,
+    setTatami,
+    scores,
+    setScores,
+    reset,
+    largestScoreIndex,
+    smallestScoreIndex,
+    showScores,
+    toggleShowScores,
+    category,
+    setCategory,
+    timer,
+    setTimer,
+    startTimer,
+    stopTimer,
+    isTimerRunning
+
+  } = useKataScoreStore((state) => state)
 
   const openWindow = () => {
     const new_window = new WebviewWindow("kata-scoreboard", {
@@ -41,7 +70,7 @@ const KATAScoreBoardController = () => {
   }
 
   return (
-    <div className='h-screen w-screen bg-black text-white flex justify-center items-center relative'>
+    <div className='h-screen w-screen bg-black text-white relative grid grid-cols-2'>
       {showScores && <div className="h-full w-full absolute top-0 left-0 bg-[#000000aa] z-30 text-5xl font-digital-display flex flex-col gap-4 justify-center items-center">
         <span>
 
@@ -51,7 +80,7 @@ const KATAScoreBoardController = () => {
           Hide Score
         </button>
       </div>}
-      <div className="w-1/2 bg-gray-800 rounded-lg p-5">
+      <div className=" bg-gray-800 rounded-lg p-5 h-screen">
 
         <div className="grid grid-cols-2">
 
@@ -66,22 +95,33 @@ const KATAScoreBoardController = () => {
           </div>
 
           <div className="flex flex-col text-xl p-2">
-              
-              <label className="font-semibold py-2" htmlFor="aka">Player</label>
-              <select name="aka" id="aka" className="bg-black text-white text-center border-2 border-white rounded-lg p-2" value={aka?"true":"false"} onChange={(e) => { toggleAka() }}>
-                <option value="true">aka</option>
-                <option value="false">ao</option>
-              </select>
+
+            <label className="font-semibold py-2" htmlFor="aka">Player</label>
+            <select name="aka" id="aka" className="bg-black text-white text-center border-2 border-white rounded-lg p-2" value={aka ? "true" : "false"} onChange={() => { toggleAka() }}>
+              <option value="true">aka</option>
+              <option value="false">ao</option>
+            </select>
           </div>
         </div>
-        <div className="flex flex-col text-xl p-2">
+        <div className="grid grid-cols-2">
+          <div className="flex flex-col text-xl p-2">
+            <label className="font-semibold py-2" htmlFor="category">Category</label>
+            <input type="text" name="category" id="category"
+              className="bg-black text-white text-center border-2 border-white rounded-lg p-2"
+              value={category}
+              onChange={(e) => { setCategory(e.target.value) }}
+            />
+          </div>
 
-          <label className="font-semibold py-2" htmlFor="division">Division</label>
-          <input type="text" name="division" id="division"
-            className="bg-black text-white text-center border-2 border-white rounded-lg p-2"
-            value={division}
-            onChange={(e) => { setDivision(e.target.value) }}
-          />
+          <div className="flex flex-col text-xl p-2">
+
+            <label className="font-semibold py-2" htmlFor="division">Division</label>
+            <input type="text" name="division" id="division"
+              className="bg-black text-white text-center border-2 border-white rounded-lg p-2"
+              value={division}
+              onChange={(e) => { setDivision(e.target.value) }}
+            />
+          </div>
         </div>
         <div className="grid grid-cols-2">
 
@@ -203,61 +243,102 @@ const KATAScoreBoardController = () => {
             </select>
           </div>
         </div>
-        <div className="flex flex-col text-xl p-2">
+        <div className="grid grid-cols-2">
 
-          <label className="font-semibold py-2" htmlFor="tatami">Tatami</label>
-          <input type="text" name="tatami" id="tatami"
-            className="bg-black text-white text-center border-2 border-white rounded-lg p-2"
-            value={tatami}
-            onChange={(e) => { setTatami(e.target.value) }}
-          />
+          <div className="flex flex-col text-xl p-2">
+
+            <label className="font-semibold py-2" htmlFor="tatami">Tatami</label>
+            <input type="text" name="tatami" id="tatami"
+              className="bg-black text-white text-center border-2 border-white rounded-lg p-2"
+              value={tatami}
+              onChange={(e) => { setTatami(e.target.value) }}
+            />
+          </div>
+          <div className="grid grid-rows-2 place-items-center">
+
+            <input type="number" min={0}
+              className="  bg-black text-white text-center border-2 border-white rounded-lg p-2 mx-auto"
+              value={timer}
+              onChange={(e) => { setTimer(parseInt(e.target.value)) }}
+              disabled={isTimerRunning}
+            />
+            <div className="grid grid-flow-col gap-2">
+              <Button onClick={() => {
+                isTimerRunning ? stopTimer() : startTimer()
+              }} color="border">
+                {isTimerRunning ? "Stop" : "Start"}
+              </Button>
+              <Button onClick={() => {
+                setTimer(0)
+                stopTimer()
+              }} color="border">
+                Reset
+              </Button>
+              <Button onClick={() => {
+                setTimer(6 * 60)
+              }} color="border">
+                6 min
+              </Button>
+              <Button onClick={() => {
+                setTimer(5 * 60)
+              }} color="border">
+                5 min
+              </Button>
+
+
+            </div>
+          </div>
         </div>
         <div className="flex flex-col text-xl p-2">
           <label className="font-semibold py-2" htmlFor="scores">Scores</label>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-5 gap-4">
 
             {
               scores.map((score, index) => {
                 return (
-
-                  <input type="number" name="scores" id="scores" key={index}
-                    className={`bg-black text-white text-center border-2 border-white rounded-lg p-2 ${numberOfJudges == 3 ? "" : largestScoreIndex === index ? 'bg-green-500' : smallestScoreIndex === index ? 'bg-red-500' : ''}`}
-                    value={score}
-                    onChange={(e) => { setScores(index, parseFloat(e.target.value)) }}
-                    max={10}
-                    min={5}
-                    step={0.1}
-                  />
+                  <div className="flex flex-col">
+                    <label className="">Judge {index + 1}</label>
+                    <input type="number" name="scores" id="scores" key={index}
+                      className={`bg-black text-white text-center border-2 border-white rounded-lg p-2 ${numberOfJudges == 3 ? "" : largestScoreIndex === index ? 'bg-green-500' : smallestScoreIndex === index ? 'bg-red-500' : ''}`}
+                      value={score}
+                      onChange={(e) => { setScores(index, parseFloat(e.target.value)) }}
+                      max={10}
+                      min={5}
+                      step={0.1}
+                    />
+                  </div>
                 )
               })
             }
           </div>
         </div>
         <div className="grid grid-flow-col gap-3 text-xl p-2">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => {
-            toggleShowScores()
-          }}>
-            Show Score
-          </button>
+
+          <Button onClick={() => { toggleShowScores() }} color="border">
+            {showScores ? "Hide Scores" : "Show Scores"}
+          </Button>
+
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => { reset() }}>Reset</button>
         </div>
-      </div>
-      <div className="bg-gray-400 w-10 h-1/2 rounded-r-lg grid grid-flow-row">
-        <button onClick={() => { 
-          isWindowOpen() && closeWindow()
-          navigate('/')
-        }}>
-          <img src={LeftArrow} alt="go back" />
-        </button>
-        <button onClick={() => { openWindow() }}>
-          <img src={MaximizeIcon} alt="maximize icon" className="" />
-        </button>
-        <button onClick={() => { closeWindow() }}>
-          <img src={CloseIcon} alt="close icon" className="" />
-        </button>
+        <div className="grid grid-flow-col place-items-center mt-3 bg-gray-300  rounded-lg p-2 ">
+          <button onClick={() => {
+            isWindowOpen() && closeWindow()
+            navigate('/')
+          }}>
+            <img src={LeftArrow} alt="go back" className="h-14 w-h-14" />
+          </button>
+          <button onClick={() => { openWindow() }}>
+            <img src={MaximizeIcon} alt="maximize icon" className=" h-14 w-14" />
+          </button>
+          <button onClick={() => { closeWindow() }}>
+            <img src={CloseIcon} alt="close icon"  className=" h-14 w-14" />
+          </button>
 
+        </div>
       </div>
-
+      <div className="overflow-scroll">
+        <iframe src="/kata-scoreboard" className="h-screen w-full"></iframe>
+      </div>
     </div>
   )
 }
