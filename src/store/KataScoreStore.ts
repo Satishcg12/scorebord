@@ -3,7 +3,7 @@ import { create } from "zustand";
 import BuzzerSound from "../assets/sounds/Buzzer.mp3"
 
 
-type KataScore = {
+export type KataScore = {
     aka:boolean;
     name: string;
     division: string;
@@ -34,7 +34,7 @@ type KataScore = {
 
 
     timer: number;
-    intervalId: number;
+    intervalId: NodeJS.Timeout;
     isTimerRunning: boolean;
 
     setTimer: (timer: number) => void;
@@ -117,7 +117,7 @@ const useKataScoreStore = create(
         }),
 
         timer: 0,
-        intervalId: 0,
+        intervalId: setInterval(() => { }, 0),
         isTimerRunning: false,
         
         setTimer: (timer: number) => {
