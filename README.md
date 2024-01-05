@@ -2,6 +2,15 @@
 
 This is a scoreboard application for Kata and Kumite matches. It is built with React, TypeScript, and Tauri.
 
+## Screenshots
+
+![Screenshot](./assets/ss.png)
+
+## Features
+
+- [x] Kata and Kumite scoreboard
+- [x] Timer
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.

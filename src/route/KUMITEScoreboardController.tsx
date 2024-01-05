@@ -5,7 +5,7 @@ import useTimerStore from '../store/Timer';
 import DoctorIcon from '../assets/icons/user-doctor-solid.svg';
 import SoundIcon from '../assets/icons/volume-high-solid.svg'
 import { useNavigate } from 'react-router-dom';
-import BuzzerSound from '../assets/sounds/buzzer.mp3';
+import BuzzerSound from '../assets/sounds/Buzzer.mp3'
 import { useState } from 'react';
 import useVRTimerStore from '../store/VRTimer';
 
