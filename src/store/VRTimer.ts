@@ -4,7 +4,7 @@ import BuzzerSound from "../assets/sounds/Buzzer.mp3"
 
 type Timer = {
     vrTime: number;
-    intervalId: number;
+    intervalId: NodeJS.Timeout;
     isVrTimerRunning: boolean;
     
     setVrTime: (vrTime: number) => void;
@@ -18,7 +18,7 @@ const Buzzer = new Audio(BuzzerSound);
 const useVRTimerStore = create(
     persistNSync<Timer>((set, get) => ({
         vrTime: 3*60,
-        intervalId: 0,
+        intervalId:setInterval(()=>{},100),
         isVrTimerRunning: false,
         setVrTime: (vrTime: number) => {
             set({ vrTime });
