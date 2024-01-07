@@ -17,8 +17,8 @@ const KUMITEScoreboardController = () => {
     category, setCategory,
     s1, changeS1,
     s2, changeS2,
-    addIppon1, addWazaari1, addYuko1, subtract1,
-    addIppon2, addWazaari2, addYuko2, subtract2,
+    score1, addIppon1, addWazaari1, addYuko1, subtract1,
+    score2, addIppon2, addWazaari2, addYuko2, subtract2,
     penaltyK1, toggleK1,
     penaltyK2, toggleK2,
     penaltyS1, toggleS1,
@@ -116,9 +116,12 @@ const KUMITEScoreboardController = () => {
   }
 
 
-
-
-
+  if(score1 - score2 >= 8){
+    Buzzer.play()
+  }
+  if(score2 - score1 >= 8){
+    Buzzer.play()
+  }
 
 
   return (

@@ -10,7 +10,7 @@ type Timer = {
     ms: number;
 
     isRunning: boolean;
-    intervalId: number;
+    intervalId: NodeJS.Timeout;
     isEditing: boolean;
 
 
@@ -32,11 +32,11 @@ const Buzzer = new Audio(BuzzerSound);
 const Beep = new Audio(BeepSound);
 const useTimerStore = create(
     persistNSync<Timer>((set, get) => ({
-        m: 0,
+        m: 3,
         s: 0,
         ms: 0,
         isRunning: false,
-        intervalId: 0,
+        intervalId:setInterval(()=>{},100),
         isEditing: false,
         setTime: (m: number, s: number) => {
             if(m<0) set({m:0})
@@ -62,7 +62,7 @@ const useTimerStore = create(
                         set({ isRunning: false });
                     }
                 }, 100);
-                set({ intervalId, isRunning: true });
+                set({ intervalId: intervalId as NodeJS.Timeout, isRunning: true });
             }
         },
         stop: () => {
@@ -92,7 +92,8 @@ const useTimerStore = create(
         setMilliseconds: (ms: number) => set({ ms }),
         setIsRunning: (isRunning: boolean) => set({ isRunning }),
         resetTimer: () => {
-            if (!get().isRunning) set({ m: 0, s: 0, ms: 0 });
+            if (get().isRunning) get().stop();
+            set({ m: 3, s: 0, ms: 0 });
         },
 
     }), {

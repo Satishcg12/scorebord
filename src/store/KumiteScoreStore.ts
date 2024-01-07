@@ -48,7 +48,7 @@ type Player = {
     setCategory: (category: string) => void;
 
     timer: number;
-    intervalId: number;
+    intervalId: NodeJS.Timeout;
     isTimerRunning: boolean;
 
     setTimer: (timer: number) => void;
@@ -136,7 +136,7 @@ const usePlayerStore = create(
         setCategory: (category: string) => set({ category }),
 
         timer: 0,
-        intervalId: 0,
+        intervalId: setInterval(() => {}, 1000),
         isTimerRunning: false,
 
         setTimer: (timer: number) => {
@@ -180,7 +180,7 @@ const usePlayerStore = create(
             winner: 0,
             category: "",
             timer: 0,
-            intervalId: 0,
+            intervalId: setInterval(() => {}, 1000),
             isTimerRunning: false,
             hantei: false,
         
