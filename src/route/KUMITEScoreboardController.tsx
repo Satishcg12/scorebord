@@ -6,7 +6,7 @@ import DoctorIcon from '../assets/icons/user-doctor-solid.svg';
 import SoundIcon from '../assets/icons/volume-high-solid.svg'
 import { useNavigate } from 'react-router-dom';
 import BuzzerSound from '../assets/sounds/Buzzer.mp3'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useVRTimerStore from '../store/VRTimer';
 
 
@@ -115,13 +115,14 @@ const KUMITEScoreboardController = () => {
     }
   }
 
+  //if there is 8 point difference between the two players play the buzzer sound and stop the timer
 
-  if(score1 - score2 >= 8){
-    Buzzer.play()
-  }
-  if(score2 - score1 >= 8){
-    Buzzer.play()
-  }
+  useEffect(() => {
+    if (Math.abs(score1 - score2) >= 8 && isRunning) {
+      Buzzer.play()
+      stop()
+    }
+  }, [score1, score2])
 
 
   return (

@@ -74,13 +74,7 @@ const usePlayerStore = create(
 
         score1: 0,
         score2: 0,
-        addIppon1: () => {
-            if (get().s1) {
-                set({ score1: get().score1 + 3, s1: false });
-            } else {
-                set({ score1: get().score1 + 3 });
-            }
-        },
+        addIppon1: () => set({ score1: get().score1 + 3 }),
         addIppon2: () => set({ score2: get().score2 + 3 }),
         addWazaari1: () => set({ score1: get().score1 + 2 }),
         addWazaari2: () => set({ score2: get().score2 + 2 }),
