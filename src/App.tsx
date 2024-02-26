@@ -38,10 +38,11 @@ function App() {
             </div>
           </div>
         </div>
-        <span  className="absolute bottom-0 right-0 text-xl underline font-quikhand font-thin tracking-widest ">
-          <a  href="https://github.com/Satishcg12" target="_blank" className="text-2xl">
+        <span  className="absolute bottom-0 right-0  underline font-quikhand font-thin tracking-widest ">
+          <a  href="https://github.com/Satishcg12" target="_blank" className="">
             By - Satish Chaudhary
           </a>
+          <p>Contact: <span className="font-sans font-semibold">9869006545</span></p>
         </span>
       </div> 
     </>

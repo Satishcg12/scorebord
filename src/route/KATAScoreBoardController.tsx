@@ -296,7 +296,7 @@ const KATAScoreBoardController = () => {
             {
               scores.map((score, index) => {
                 return (
-                  <div className="flex flex-col">
+                  <div className="flex flex-col" key={index}>
                     <label className="">Judge {index + 1}</label>
                     <input type="number" name="scores" id="scores" key={index}
                       className={`bg-black text-white text-center border-2 border-white rounded-lg p-2 ${numberOfJudges == 3 ? "" : largestScoreIndex === index ? 'bg-green-500' : smallestScoreIndex === index ? 'bg-red-500' : ''}`}

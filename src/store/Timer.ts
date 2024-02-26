@@ -10,7 +10,7 @@ type Timer = {
     ms: number;
 
     isRunning: boolean;
-    intervalId: NodeJS.Timeout;
+    intervalId: number;
     isEditing: boolean;
 
 
@@ -62,7 +62,7 @@ const useTimerStore = create(
                         set({ isRunning: false });
                     }
                 }, 100);
-                set({ intervalId: intervalId as NodeJS.Timeout, isRunning: true });
+                set({ intervalId: intervalId , isRunning: true });
             }
         },
         stop: () => {
