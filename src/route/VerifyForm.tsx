@@ -1,8 +1,8 @@
 import { FormEvent, useEffect, useState } from "react";
 import useVerifyStore from "../store/VerifyStore";
 import { Navigate, useNavigate } from "react-router-dom";
-import { API } from "../utils/config";
 import logo from "../assets/images/logo.jpg";
+import { supabase } from "../utils/supabase";
 
 export default function VerifyForm() {
   const [username, setUsername] = useState("");
@@ -17,25 +17,28 @@ export default function VerifyForm() {
     e.preventDefault();
     if (isVerifiying) return;
     setIsVerifying(true);
-    const response = await fetch(
-      API + "?product_key=" + productkey + "&username=" + username
-    );
-    const res = await response.json();
+    const {data: license, error} = await supabase.from("license").select("*").eq("product_key", productkey).eq("username", username);
     setIsVerifying(false);
-    if (res.error === false) {
-      if (res.data[0].active) {
-        verify();
-        useVerifyStore.setState({
-          isVerified: true,
-          username: username,
-          productKey: productkey,
-          lastVerified: new Date().toDateString(),
-        })
-      }
-
-    } else {
-      alert("Product key not verified");
+    if (error) {
+      alert("Invalid product key or username");
+      return;
     }
+    if (license.length === 0) {
+      alert("Invalid product key or username");
+      return;
+    }
+    if (!license[0].active) {
+      alert("Your product key is not active");
+      return;
+    }
+    verify();
+    useVerifyStore.setState({
+      isVerified: true,
+      username: username,
+      productKey: productkey,
+      lastVerified: new Date().toDateString(),
+    });
+
   };
 
   useEffect(() => {
@@ -151,7 +154,7 @@ export default function VerifyForm() {
     <div className="bg-gray-100 px-2 text-center">
       <div className="h-screen flex flex-col justify-center items-center">
         <img
-          src="/assets/images/logo.jpg"
+          src={logo}
           alt="Kata kumte logo"
           className="w-32 h-32"
         />

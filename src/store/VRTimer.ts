@@ -4,7 +4,7 @@ import BuzzerSound from "../assets/sounds/Buzzer.mp3"
 
 type Timer = {
     vrTime: number;
-    intervalId: number;
+    intervalId: NodeJS.Timeout;
     isVrTimerRunning: boolean;
     
     setVrTime: (vrTime: number) => void;

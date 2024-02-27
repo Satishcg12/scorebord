@@ -10,7 +10,7 @@ type Timer = {
     ms: number;
 
     isRunning: boolean;
-    intervalId: number;
+    intervalId: NodeJS.Timeout;
     isEditing: boolean;
 
 

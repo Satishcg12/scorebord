@@ -34,7 +34,7 @@ export type KataScore = {
 
 
     timer: number;
-    intervalId: number;
+    intervalId: NodeJS.Timeout;
     isTimerRunning: boolean;
 
     setTimer: (timer: number) => void;

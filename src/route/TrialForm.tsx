@@ -1,8 +1,8 @@
 import { FormEvent, useEffect, useState } from "react";
 import useVerifyStore from "../store/VerifyStore";
 import { Navigate } from "react-router-dom";
-import { API } from "../utils/config";
 import logo from "../assets/images/logo.jpg";
+import { supabase } from "../utils/supabase";
 
 export default function TrialForm() {
   const [username, setUsername] = useState("");
@@ -15,15 +15,23 @@ export default function TrialForm() {
     e.preventDefault();
     if (isVerifiying) return;
     setIsVerifying(true);
-    const response = await fetch(`${API}?trial_username=${username}`);
-    const res = await response.json();
+    const { data: license, error } = await supabase.from("license").select("*").eq("username", username);
     setIsVerifying(false);
-    console.log(res);
-    if (res.error === false) {
-        startTrial(res.data[0].trial_at);
-    } else {
-      alert("You are not eligible for a trial");
+    
+    if (error) {
+      alert("Invalid username");
+      return;
     }
+    if (license.length === 0) {
+      alert("Invalid username");
+      return;
+    }
+    if (!license[0].trial) {
+      alert("Your product key is not active");
+      return;
+    }
+    startTrial(license[0].trial_at??'');
+    
   };
 
   useEffect(() => {
@@ -125,7 +133,7 @@ export default function TrialForm() {
     <div className="bg-gray-100 px-2 text-center">
       <div className="h-screen flex flex-col justify-center items-center">
         <img
-          src="/assets/images/logo.jpg"
+          src={logo}
           alt="Kata kumte logo"
           className="w-32 h-32"
         />
